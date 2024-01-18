@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сканер штрих-кодів</title>
+    <!-- Підключення бібліотеки Instascan -->
+    <script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+</head>
+<body>
+    <!-- Відображення камери для сканування штрих-кодів -->
+    <video id="preview"></video>
+
+    <!-- Виведення значення штрих-коду на сторінку та в консоль -->
+    <p id="result"></p>
+
+    <!-- Скрипт для ініціалізації сканера -->
+    <script type="text/javascript">
+        // Створення об'єкту сканера
+        let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+
+        // Обробка подій під час сканування
+        scanner.addListener('scan', function (content) {
+            document.getElementById('result').innerText = 'Значення штрих-коду: ' + content;
+            console.log('Знайдено штрих-код:', content);
+            // Можете також використовувати значення штрих-коду для інших дій
+        });
+
+        // Запуск сканера
+        Instascan.Camera.getCameras().then(function (cameras) {
+            if (cameras.length > 0) {
+                scanner.start(cameras[0]); // Використовуйте першу знайдену камеру
+            } else {
+                console.error('No cameras found.');
+            }
+        }).catch(function (e) {
+            console.error(e);
+        });
+    </script>
+</body>
+</html>
